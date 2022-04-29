@@ -13,14 +13,6 @@ class ShowOrderDetail(BaseModel):
     
     class Config:
         orm_mode=True
-        # schema_extra = {
-        #     "example": {
-        #         "name": "John Cina",
-        #         "email": "johncina@gmail.com",
-        #         "password": "password"
-        #     }
-        # }
-    
     
 class ShowOrder(BaseModel):
     id: Optional[int]

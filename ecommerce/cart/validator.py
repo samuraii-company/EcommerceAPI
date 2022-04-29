@@ -2,6 +2,8 @@ from sqlalchemy.orm import Session
 from . import models
 from typing import Optional
 
+from ecommerce.user.schemas import User
+
 
 async def verify_item_in_caft_exist(item_id: int, db_session: Session) ->Optional[models.Cart]:
     """

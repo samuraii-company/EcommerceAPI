@@ -8,13 +8,16 @@ from . import schemas
 from . import services
 from . import validator
 
+from ecommerce.user.schemas import User
+from ecommerce.auth.jwt import get_current_user
+
 router = APIRouter(tags=["Users"], prefix="/api/v1/user")
 
 
 @router.post("/")
 async def create_user_registration(
     request: schemas.User,
-    database: Session = Depends(db.get_db)
+    database: Session = Depends(db.get_db),
 ):
     """
     Register New User
@@ -32,7 +35,10 @@ async def create_user_registration(
     
     
 @router.get("/", response_model=List[schemas.OutUser])
-async def get_all_users(database: Session = Depends(db.get_db)):
+async def get_all_users(
+    database: Session = Depends(db.get_db), 
+    get_current_user: User = Depends(get_current_user)
+):
     """
     Get all users
     """
@@ -47,7 +53,11 @@ async def get_all_users(database: Session = Depends(db.get_db)):
 
 
 @router.get("/{user_id}/", response_model=schemas.OutUser)
-async def get_user_by_id(user_id: int, database: Session = Depends(db.get_db)):
+async def get_user_by_id(
+    user_id: int,
+    database: Session = Depends(db.get_db),
+    get_current_user: User = Depends(get_current_user)
+):
     """
     Get user by id
     """
@@ -62,7 +72,11 @@ async def get_user_by_id(user_id: int, database: Session = Depends(db.get_db)):
 
 
 @router.delete("/{user_id}/")
-async def delete_user_by_id(user_id: int, database: Session = Depends(db.get_db)):
+async def delete_user_by_id(
+    user_id: int,
+    database: Session = Depends(db.get_db),
+    get_current_user: User = Depends(get_current_user)
+):
     """
     Delete user by id
     """

@@ -10,11 +10,11 @@ from typing import List
 from sqlalchemy.orm import Session
 
 
-async def initiate_order(db_session: Session) -> models.Order:
+async def initiate_order(db_session: Session, current_user: User) -> models.Order:
     """
     Initiate Order
     """
-    user_info = db_session.query(User).filter(User.email=="test@gmail.com").first()
+    user_info = db_session.query(User).filter(User.email==current_user.email).first()
     cart = db_session.query(Cart).filter(Cart.user_id==user_info.id).first()
     cart_items_obj=db_session.query(CartItems).join(Product).join(Cart).filter(Cart.id==cart.id).all()
     if not cart_items_obj:
@@ -62,10 +62,10 @@ async def initiate_order(db_session: Session) -> models.Order:
 
 
 
-async def get_order_list(db_session: Session) -> List[models.Order]:
+async def get_order_list(db_session: Session, current_user: User) -> List[models.Order]:
     """
     Get Orders List
     """
-    user_info = db_session.query(User).filter(User.email=="test@gmail.com").first()
+    user_info = db_session.query(User).filter(User.email==current_user.email).first()
     orders = db_session.query(models.Order).filter(models.Order.customer_id==user_info.id).all()
     return orders

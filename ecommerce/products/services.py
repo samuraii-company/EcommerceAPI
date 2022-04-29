@@ -9,7 +9,7 @@ async def get_all_category(db_session: Session) -> Optional[models.Category]:
     """
     Get all category
     """
-    category = db_session.query(models.Category).join(models.Product).all()
+    category = db_session.query(models.Category).all()
     return category
 
 

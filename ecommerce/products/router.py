@@ -8,13 +8,14 @@ from . import schemas
 from . import services
 from . import validator
 
+from ecommerce.user.schemas import User
+from ecommerce.auth.jwt import get_current_user
+
 router = APIRouter(tags=["Products"], prefix="/api/v1/products")
 
 
-@router.get("/caregory/", response_model=List[schemas.OutCategory])
-async def get_all_category(
-    database: Session = Depends(db.get_db)
-):
+@router.get("/category/", response_model=List[schemas.OutCategory])
+async def get_all_category(database: Session = Depends(db.get_db)):
     """
     Get all category
     """
@@ -29,10 +30,11 @@ async def get_all_category(
     return category
 
 
-@router.post("/caregory/")
+@router.post("/category/")
 async def create_category(
     request: schemas.Category,
-    database: Session = Depends(db.get_db)
+    database: Session = Depends(db.get_db),
+    get_current_user: User = Depends(get_current_user)
 ):
     """
     Create category
@@ -42,7 +44,7 @@ async def create_category(
     return category
 
 
-@router.get("/caregory/{id}/", response_model=schemas.OutCategory)
+@router.get("/category/{id}/", response_model=schemas.OutCategory)
 async def get_category_by_id(
     id: int,
     database: Session = Depends(db.get_db)
@@ -60,10 +62,11 @@ async def get_category_by_id(
     return category
 
 
-@router.delete("/caregory/{id}/")
+@router.delete("/category/{id}/")
 async def delete_category_by_id(
     id: int,
-    database: Session = Depends(db.get_db)
+    database: Session = Depends(db.get_db),
+    get_current_user: User = Depends(get_current_user)
 ):
     """
     Delete category by id
@@ -85,7 +88,8 @@ async def delete_category_by_id(
 @router.post("/")
 async def create_product(
     request: schemas.Product,
-    database: Session = Depends(db.get_db)
+    database: Session = Depends(db.get_db),
+    get_current_user: User = Depends(get_current_user)
 ):
     """
     Create new product
@@ -141,7 +145,8 @@ async def get_product_by_id(
 @router.delete("/{id}/")
 async def delete_product_by_id(
     id: int,
-    database: Session = Depends(db.get_db)
+    database: Session = Depends(db.get_db),
+    get_current_user: User = Depends(get_current_user)
 ):
     """
     Delete product by id
