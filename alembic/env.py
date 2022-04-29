@@ -34,7 +34,7 @@ target_metadata = Base.metadata
 
 
 def get_url():
-    return "postgresql://postgres:secretpassword@localhost/postgres"
+    return "postgresql://postgres:secretpassword@0.0.0.0:5432/postgres"
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.

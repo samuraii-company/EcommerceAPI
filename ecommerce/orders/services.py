@@ -16,7 +16,13 @@ async def initiate_order(db_session: Session, current_user: User) -> models.Orde
     """
     user_info = db_session.query(User).filter(User.email==current_user.email).first()
     cart = db_session.query(Cart).filter(Cart.user_id==user_info.id).first()
-    cart_items_obj=db_session.query(CartItems).join(Product).join(Cart).filter(Cart.id==cart.id).all()
+    if not cart:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Before initiate order, you need add some product in your cart"
+        )
+
+    cart_items_obj = db_session.query(CartItems).join(Product).join(Cart).filter(Cart.id==cart.id).all()
     if not cart_items_obj:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

@@ -13,7 +13,8 @@ async def test_order_processing():
         user_access_token = create_access_token({"sub": "test@gmail.com"})
         category_obj = await category_info()
         product_obj = await product_info(category_obj)
-
+        order_response = await ac.post("/orders/", headers={'Authorization': f'Bearer {user_access_token}'})
+        assert order_response.status_code == 404
         cart_response = await ac.get(
             f"/cart/add/",
             params={'product_id': product_obj.id},

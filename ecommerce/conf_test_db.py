@@ -5,7 +5,7 @@ from ecommerce.db import Base, get_db
 from main import app
 
 
-SQLALCHEMY_DATABASE_URL =  "postgresql://postgres:secretpassword@localhost/test_database"
+SQLALCHEMY_DATABASE_URL =  "postgresql://postgres:secretpassword@0.0.0.0:5432/test_database"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

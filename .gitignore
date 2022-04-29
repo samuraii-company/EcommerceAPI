@@ -28,3 +28,5 @@ archive.zip
 !images/.gitkeep
 db.sqlite3
 
+alembic/
+alembic.ini
