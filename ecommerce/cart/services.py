@@ -17,9 +17,8 @@ async def add_to_cart(
     """
     Add to Cart
     """
-    product_info = db_session.query(Product).get(product_id)
-
-    if not product_id:
+    product_info = db_session.query(Product).filter(Product.id==product_id).first()
+    if not product_info:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Data Not Found!"

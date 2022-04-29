@@ -3,7 +3,8 @@ from httpx import AsyncClient
 
 from ecommerce.auth.jwt import create_access_token
 from ecommerce.conf_test_db import app
-from .info import category_info, product_info
+from .info import category_info, product_info, product_info_zero_quantity
+from ecommerce.products.models import Product
 
 
 @pytest.mark.asyncio
@@ -48,3 +49,55 @@ async def test_cart_listing():
         response = await ac.get(f"/cart/", headers={'Authorization': f'Bearer {user_access_token}'})
 
     assert response.status_code == 200
+    
+    
+@pytest.mark.asyncio
+async def test_bad_delete_from_cart():
+    async with AsyncClient(app=app, base_url="http://test") as ac:
+        user_access_token = create_access_token({"sub": "test@gmail.com"})
+        response = await ac.delete(f"/cart/10/", headers={'Authorization': f'Bearer {user_access_token}'})
+        assert response.status_code == 404
+        
+        
+        
+
+@pytest.mark.asyncio
+async def test_bad_add_to_cart():
+    async with AsyncClient(app=app, base_url="http://test") as ac:
+        user_access_token = create_access_token({"sub": "test@gmail.com"})
+        response = await ac.get(
+            f"/cart/add/",
+            params={'product_id': 100},
+            headers={'Authorization': f'Bearer {user_access_token}'}
+        )
+        assert response.status_code == 404
+        
+        category_obj = await category_info()
+        prd = await product_info_zero_quantity(category_obj)
+        response = await ac.get(
+            f"/cart/add/",
+            params={'product_id': prd.id},
+            headers={'Authorization': f'Bearer {user_access_token}'}
+        )
+        assert response.status_code == 404
+        
+        
+@pytest.mark.asyncio
+async def test_add_to_old_cart():
+    async with AsyncClient(app=app, base_url="http://test") as ac:
+        user_access_token = create_access_token({"sub": "test@gmail.com"})
+        category_obj = await category_info()
+        prd = await product_info(category_obj)
+        response = await ac.get(
+            f"/cart/add/",
+            params={'product_id': prd.id},
+            headers={'Authorization': f'Bearer {user_access_token}'}
+        )
+        assert response.status_code == 201
+        prd = await product_info(category_obj)
+        response = await ac.get(
+            f"/cart/add/",
+            params={'product_id': prd.id},
+            headers={'Authorization': f'Bearer {user_access_token}'}
+        )
+        assert response.status_code == 201

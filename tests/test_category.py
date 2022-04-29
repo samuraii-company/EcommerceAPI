@@ -7,13 +7,27 @@ from ecommerce.conf_test_db import app, override_get_db
 
 
 @pytest.mark.asyncio
+async def test_list_get_category_bad():
+    async with AsyncClient(app=app, base_url="http://test") as ac:
+        user_access_token = create_access_token({"sub": "test@gmail.com"})
+        
+        response = await ac.delete("api/v1/products/category/1/", headers={'Authorization': f'Bearer {user_access_token}'})
+        response = await ac.delete("api/v1/products/category/2/", headers={'Authorization': f'Bearer {user_access_token}'})
+        response = await ac.delete("api/v1/products/category/3/", headers={'Authorization': f'Bearer {user_access_token}'})
+        response = await ac.delete("api/v1/products/category/20/", headers={'Authorization': f'Bearer {user_access_token}'})
+        
+        first_response = await ac.get("api/v1/products/category/")
+        second_response = await ac.get(f"api/v1/products/category/24/")
+        assert first_response.status_code == 404
+        assert second_response.status_code == 404
+
+@pytest.mark.asyncio
 async def test_new_category():
     async with AsyncClient(app=app, base_url="http://test") as ac:
         user_access_token = create_access_token({"sub": "test@gmail.com"})
         response = await ac.post("api/v1/products/category/", json={'name': 'Apparels'}, headers={'Authorization': f'Bearer {user_access_token}'})
     assert response.status_code == 200
     assert response.json()['name'] == "Apparels"
-
 
 @pytest.mark.asyncio
 async def test_list_get_category():

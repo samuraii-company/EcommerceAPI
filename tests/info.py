@@ -34,3 +34,21 @@ async def product_info(category_obj: Category) -> Product:
     database.commit()
     database.refresh(new_product)
     return new_product
+
+
+
+async def product_info_zero_quantity(category_obj: Category) -> Product:
+    database = next(override_get_db())
+    payload = {
+        "id": 20,
+        "name": "Quaker Oats",
+        "quantity": 0,
+        "description": "Quaker: Good Quality Oats",
+        "price": 10,
+        "category_id": category_obj.id
+    }
+    new_product = Product(**payload)
+    database.add(new_product)
+    database.commit()
+    database.refresh(new_product)
+    return new_product

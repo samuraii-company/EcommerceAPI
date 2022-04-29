@@ -16,4 +16,4 @@ async def verify_product_exist(product: int, db_session: Session) ->Optional[mod
     """
     Verifying product exist in database
     """
-    return db_session.query(models.Category).filter(product==models.Product.id).first()
+    return db_session.query(models.Product).filter(product==models.Product.id).first()

@@ -5,7 +5,6 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from ecommerce import config as cfg #noqa
 from ecommerce.db import Base #noqa
 
 from ecommerce.user.models import User
@@ -35,12 +34,7 @@ target_metadata = Base.metadata
 
 
 def get_url():
-    db_user = cfg.DATABASE_USERNAME
-    db_password = cfg.DATABASE_PASSWORD
-    db_host = cfg.DATABASE_HOST
-    db_name = cfg.DATABASE_NAME
-    
-    return f"postgresql://{db_user}:{db_password}@{db_host}/{db_name}"
+    return "postgresql://postgres:secretpassword@localhost/postgres"
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.

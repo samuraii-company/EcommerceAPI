@@ -66,7 +66,7 @@ async def get_user_by_id(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found in system"
+            detail=f"User with id:{user_id} not found in system"
         )
     return user
 
@@ -80,6 +80,13 @@ async def delete_user_by_id(
     """
     Delete user by id
     """
+    user = await services.get_user_by_id(user_id, database)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Can't Delete User with id:{user_id} because user not found in system"
+        )
+
     await services.delete_user_by_id(user_id, database)
     
     return JSONResponse(

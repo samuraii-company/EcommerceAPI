@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-import uvicorn
 from ecommerce.user import router
 from ecommerce.cart import router as cart_router
 from ecommerce.products import router as product_router
@@ -18,11 +17,3 @@ app.include_router(order_router.router)
 async def root():
     return {"message": "Ecommerce API"}
 
-
-if __name__ == "__main__":
-    uvicorn.run(
-        "main:app",
-        host="127.0.0.1",
-        port=8000,
-        reload=True
-    )
