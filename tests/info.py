@@ -4,7 +4,7 @@ from ecommerce.products.models import Category, Product
 from ecommerce.conf_test_db import override_get_db
 
 
-async def category_info() -> Category:
+def category_info() -> Category:
     fake = Faker()
     database = next(override_get_db())
     category_count = database.query(Category).filter().count()
@@ -20,7 +20,7 @@ async def category_info() -> Category:
     return category_obj
 
 
-async def product_info(category_obj: Category) -> Product:
+def product_info(category_obj: Category) -> Product:
     database = next(override_get_db())
     payload = {
         "name": "Quaker Oats",
@@ -36,7 +36,7 @@ async def product_info(category_obj: Category) -> Product:
     return new_product
 
 
-async def product_info_zero_quantity(category_obj: Category) -> Product:
+def product_info_zero_quantity(category_obj: Category) -> Product:
     database = next(override_get_db())
     payload = {
         "id": 20,

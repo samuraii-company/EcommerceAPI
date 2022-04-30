@@ -44,10 +44,6 @@ async def get_all_users(
     """
     users = await services.get_all_users(database)
 
-    if not users:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Users not found in system"
-        )
     return users
 
 

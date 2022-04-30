@@ -1,6 +1,7 @@
 import pytest
 
 from ecommerce.user import models
+from ecommerce.products import models as mdls
 
 
 @pytest.fixture(autouse=True)
@@ -16,6 +17,9 @@ def create_dummy_user(tmpdir):
 
     yield  # this is where the testing happens
 
-    # Teardown : fill with any logic you want
-    database.query(models.User).filter(models.User.email == "test@gmail.com").delete()
+    database.query(models.User).delete()
+    database.commit()
+    database.query(mdls.Product).delete()
+    database.commit()
+    database.query(mdls.Category).delete()
     database.commit()

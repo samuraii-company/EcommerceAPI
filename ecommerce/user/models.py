@@ -20,6 +20,3 @@ class User(Base):
         self.name = name
         self.email = email
         self.password = hashing.get_password_hash(password)
-
-    def check_password(self, password: str):
-        return hashing.verify_password(self.password, password)
