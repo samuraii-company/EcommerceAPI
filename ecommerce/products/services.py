@@ -13,7 +13,9 @@ async def get_all_category(db_session: Session) -> Optional[models.Category]:
     return category
 
 
-async def create_new_category(request: schemas.Category, db_session: Session) -> models.Category:
+async def create_new_category(
+    request: schemas.Category, db_session: Session
+) -> models.Category:
     """
     Create new category
     """
@@ -21,15 +23,17 @@ async def create_new_category(request: schemas.Category, db_session: Session) ->
     db_session.add(category)
     db_session.commit()
     db_session.refresh(category)
-    
+
     return category
-    
-    
+
+
 async def get_category_by_id(id: int, db_session: Session) -> Optional[models.Category]:
     """
     Get category by id
     """
-    category = db_session.query(models.Category).filter(models.Category.id==id).first()
+    category = (
+        db_session.query(models.Category).filter(models.Category.id == id).first()
+    )
     return category
 
 
@@ -37,12 +41,13 @@ async def delete_category_by_id(id: int, db_session: Session) -> None:
     """
     Delete category by id
     """
-    db_session.query(models.Category).filter(models.Category.id==id).delete()
+    db_session.query(models.Category).filter(models.Category.id == id).delete()
     db_session.commit()
-    
-    
 
-async def create_product(request: schemas.Product, db_session: Session) -> models.Product:
+
+async def create_product(
+    request: schemas.Product, db_session: Session
+) -> models.Product:
     """
     Create new product
     """
@@ -72,7 +77,7 @@ async def get_product_by_id(id: int, db_session: Session) -> Optional[models.Pro
     """
     Get product by id
     """
-    product = db_session.query(models.Product).filter(models.Product.id==id).first()
+    product = db_session.query(models.Product).filter(models.Product.id == id).first()
     return product
 
 
@@ -80,5 +85,5 @@ async def delete_product_by_id(id: int, db_session: Session) -> None:
     """
     Delete product by id
     """
-    db_session.query(models.Product).filter(models.Product.id==id).delete()
+    db_session.query(models.Product).filter(models.Product.id == id).delete()
     db_session.commit()

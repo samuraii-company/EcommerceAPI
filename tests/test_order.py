@@ -13,15 +13,19 @@ async def test_order_processing():
         user_access_token = create_access_token({"sub": "test@gmail.com"})
         category_obj = await category_info()
         product_obj = await product_info(category_obj)
-        order_response = await ac.post("/orders/", headers={'Authorization': f'Bearer {user_access_token}'})
+        order_response = await ac.post(
+            "/orders/", headers={"Authorization": f"Bearer {user_access_token}"}
+        )
         assert order_response.status_code == 404
         cart_response = await ac.get(
-            f"/cart/add/",
-            params={'product_id': product_obj.id},
-            headers={'Authorization': f'Bearer {user_access_token}'}
+            "/cart/add/",
+            params={"product_id": product_obj.id},
+            headers={"Authorization": f"Bearer {user_access_token}"},
         )
 
-        order_response = await ac.post("/orders/", headers={'Authorization': f'Bearer {user_access_token}'})
+        order_response = await ac.post(
+            "/orders/", headers={"Authorization": f"Bearer {user_access_token}"}
+        )
 
     assert cart_response.status_code == 201
     assert order_response.status_code == 200
@@ -31,11 +35,13 @@ async def test_order_processing():
 async def test_order_listing():
     async with AsyncClient(app=app, base_url="http://test") as ac:
         user_access_token = create_access_token({"sub": "test@gmail.com"})
-        response = await ac.get("/orders/", headers={'Authorization': f'Bearer {user_access_token}'})
+        response = await ac.get(
+            "/orders/", headers={"Authorization": f"Bearer {user_access_token}"}
+        )
 
     assert response.status_code == 200
-    
-    
+
+
 @pytest.mark.asyncio
 async def test_order_processing_bad():
 
@@ -44,18 +50,25 @@ async def test_order_processing_bad():
         category_obj = await category_info()
         product_obj = await product_info(category_obj)
         cart_response = await ac.get(
-            f"/cart/add/",
-            params={'product_id': product_obj.id},
-            headers={'Authorization': f'Bearer {user_access_token}'}
+            "/cart/add/",
+            params={"product_id": product_obj.id},
+            headers={"Authorization": f"Bearer {user_access_token}"},
         )
         assert cart_response.status_code == 201
         assert cart_response.json() == {"status": "Item Added to Cart"}
-        
-        cart = response = await ac.get(f"/cart/", headers={'Authorization': f'Bearer {user_access_token}'})
+
+        cart = response = await ac.get(
+            "/cart/", headers={"Authorization": f"Bearer {user_access_token}"}
+        )
         item_id = cart.json()["cart_items"][0]["id"]
-        
-        response = await ac.delete(f"/cart/{item_id}/", headers={'Authorization': f'Bearer {user_access_token}'})
+
+        response = await ac.delete(
+            f"/cart/{item_id}/",
+            headers={"Authorization": f"Bearer {user_access_token}"},
+        )
         assert response.status_code == 200
-        
-        order_response = await ac.post("/orders/", headers={'Authorization': f'Bearer {user_access_token}'})
+
+        order_response = await ac.post(
+            "/orders/", headers={"Authorization": f"Bearer {user_access_token}"}
+        )
         assert order_response.status_code == 404

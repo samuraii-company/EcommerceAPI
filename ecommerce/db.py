@@ -2,7 +2,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from . import config
 
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:secretpassword@0.0.0.0:5432/postgres"
 

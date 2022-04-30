@@ -9,24 +9,23 @@ from ecommerce.user.models import User
 
 from .jwt import create_access_token
 
-router = APIRouter(
-    tags=['auth']
-)
+router = APIRouter(tags=["auth"])
 
 
-@router.post('/login')
-def login(request: OAuth2PasswordRequestForm = Depends(), database: Session = Depends(db.get_db)):
+@router.post("/login")
+def login(
+    request: OAuth2PasswordRequestForm = Depends(),
+    database: Session = Depends(db.get_db),
+):
     user = database.query(User).filter(User.email == request.username).first()
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Invalid Credentials'
+            status_code=status.HTTP_404_NOT_FOUND, detail="Invalid Credentials"
         )
 
     if not hashing.verify_password(request.password, user.password):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail='Invalid Password'
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Password"
         )
 
     access_token = create_access_token(data={"sub": user.email})

@@ -1,5 +1,5 @@
 from typing import Optional, List
-from pydantic import BaseModel, constr, EmailStr
+from pydantic import BaseModel, constr
 
 
 class Product(BaseModel):
@@ -8,29 +8,31 @@ class Product(BaseModel):
     description: str
     price: float
     category_id: int
-    
+
     class Config:
-         schema_extra = {
+        schema_extra = {
             "example": {
                 "name": "BMW",
                 "quantity": 1,
                 "description": "BMW Car",
                 "price": 100000,
-                "category_id": 1
+                "category_id": 1,
             }
         }
+
 
 class Category(BaseModel):
     id: Optional[int]
     name: constr(min_length=3, max_length=20)
-    
+
     class Config:
-        orm_mode=True
+        orm_mode = True
         schema_extra = {
             "example": {
                 "name": "Cars",
             }
         }
+
 
 class OutProductsOnly(BaseModel):
     id: int
@@ -38,9 +40,10 @@ class OutProductsOnly(BaseModel):
     quantity: int
     description: str
     price: float
-    
+
     class Config:
-        orm_mode=True
+        orm_mode = True
+
 
 class OutProduct(BaseModel):
     id: int
@@ -49,9 +52,9 @@ class OutProduct(BaseModel):
     description: str
     price: float
     category: Optional[Category]
-    
+
     class Config:
-        orm_mode=True
+        orm_mode = True
         schema_extra = {
             "example": {
                 "id": 1,
@@ -59,20 +62,18 @@ class OutProduct(BaseModel):
                 "quantity": 1,
                 "description": "BMW Car",
                 "price": 100000,
-                "category": {
-                    "id": 1,
-                    "name": "Cars"
-                }
+                "category": {"id": 1, "name": "Cars"},
             }
         }
+
 
 class OutCategory(BaseModel):
     id: int
     name: str
     product: Optional[List[OutProductsOnly]] = []
-    
+
     class Config:
-        orm_mode=True
+        orm_mode = True
         schema_extra = {
             "example": {
                 "id": 1,
@@ -83,17 +84,15 @@ class OutCategory(BaseModel):
                         "name": "BMW",
                         "quantity": 1,
                         "description": "BMW Car",
-                        "price": 100000
+                        "price": 100000,
                     },
                     {
                         "id": 2,
                         "name": "Ford",
                         "quantity": 2,
                         "description": "Ford Car",
-                        "price": 20000
-                    }
-                ]
+                        "price": 20000,
+                    },
+                ],
             }
         }
-        
-        

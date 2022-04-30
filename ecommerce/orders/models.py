@@ -3,9 +3,6 @@ from sqlalchemy.orm import relationship
 from ecommerce.db import Base
 from datetime import datetime
 
-from ecommerce.products.models import Product
-from ecommerce.user.models import User
-
 
 class Order(Base):
     __tablename__ = "order"
@@ -18,7 +15,7 @@ class Order(Base):
     customer_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
     order_detail = relationship("OrderDetail", back_populates="order")
     user_info = relationship("User", back_populates="order")
-    
+
 
 class OrderDetail(Base):
     __tablename__ = "order_detail"
@@ -26,7 +23,7 @@ class OrderDetail(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     order_id = Column(Integer, ForeignKey("order.id", ondelete="CASCADE"))
     product_id = Column(Integer, ForeignKey("products.id", ondelete="CASCADE"))
-    order = relationship("Order",back_populates="order_detail")
+    order = relationship("Order", back_populates="order_detail")
     product_order_detail = relationship("Product", back_populates="order_detail")
     customer_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
     quantity = Column(Integer, default=1)
